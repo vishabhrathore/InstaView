@@ -1,10 +1,15 @@
 const dotenv = require("dotenv")
 const mongoose = require('mongoose');
 const express = require("express")
-const app = express()
-const authorization = require("../server/routes/route")
+const app = express()   
+const authorization = require("../server/routes/route")    
+const cors = require('cors')
+   
+app.use(cors())
+  
 
 dotenv.config({path:'./config.env'}) 
+// app.use(express.cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))

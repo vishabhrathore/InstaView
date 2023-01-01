@@ -1,0 +1,204 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18%;
+     background-color: white;
+     position: sticky;
+     top:0;
+     z-index: 10;
+}
+header .logo{
+    height: 40px;
+}
+header .logo img{
+    height: 100%;
+    object-fit: contain;
+}
+header .search-box{
+    width: 250px;
+    background-color: rgb(201, 201, 223);
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+}
+header .search-box input{
+    height: 30px;
+    background-color: rgb(201, 201, 223);
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    font-size: 15px;
+
+}
+header nav ul{
+    list-style: none;
+    display: flex;
+}
+header nav ul li{
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}header nav ul li img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: contain;
+} 
+/*body section */
+
+section{
+    padding: 30px 18%;
+    background-color: rgb(239, 239, 255);
+}
+.left-side{
+   width:65%;
+}
+.story{
+    display:  flex;
+    padding: 16px;
+    background-color: white;
+    border: 1px solid rgb(199, 199, 255);
+    border-radius: 3px;
+
+
+}
+.story .stories{
+    width: 17%;
+}
+.story .stories img{
+    border-radius: 50%;
+    border:1px solid rgb(159, 159, 219) ;
+    padding: 1px;
+    object-fit: contain;
+    height: 60px;
+}
+.story .stories img:hover{
+    border:1px solid rgb(67, 67, 157) ;
+}
+.story .stories p{
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 15px;
+
+}
+
+
+.right-side{
+   width:35%;
+}
+
+.posts{
+    margin: 25px 0;
+    background-color: white;
+    border: 1px solid rgb(67, 67, 157);
+    border-radius: 3px;
+}
+.posts .post-title{
+ display: flex;
+ justify-content: center; 
+ align-items: center;  
+  padding: 16px;
+}
+.posts .post-title .post-left{
+    display: flex;
+    align-items: center;
+    width: 90%;
+
+}
+.posts .post-title .post-left .image{
+margin-right: 15px;
+}
+.posts .post-title .post-left .image img{
+ border-radius: 50%;
+ object-fit: contain;
+}
+.posts .post-title .post-left .details .name{
+  padding-bottom: 4px;
+  font-weight: bold ;
+}
+.posts .post-title .post-left .details .location{
+ font-size: 15px;
+ font-style: italic;
+}
+.posts .post-content img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.post .post-footer{
+    display: flex;
+    justify-content: space-between;
+}
+.lks{
+  padding: 8px;
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-content: center;
+}
+.save{
+  display: flex;
+  width: 40%;
+  justify-content:flex-end;
+  align-content: center;
+  margin-left: 100px;
+}
+
+.posts .post-footer-content{
+    padding: 0 16px 16px 16px;
+}
+.posts .post-footer-content p{
+    margin-bottom: 3px;
+}
+.posts .post-footer-content .likes{
+    margin-bottom: 8px;
+}
+.posts .post-footer-content .name{
+    font-weight: 600;
+}
+.posts .post-footer-content .posting-time{
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 6px;
+}
+.posts .add-comment{
+    padding: 16px;
+    border-top: 1px solid black;
+    display: flex;
+    align-items: center;
+   
+}
+.posts .add-comment .side-left{
+    width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.posts .add-comment .side-right{
+  color: rgb(205, 171, 239);
+}
+.posts .add-comment .side-right:hover{
+  color: rgb(113, 6, 220);
+  cursor: pointer;
+}
+.posts .add-comment .side-left input{
+    width: 100%;
+    outline: none;
+    border: none;
+    margin-left: 10px;
+    font-size: 14px;
+}
+

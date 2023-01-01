@@ -26,15 +26,15 @@ exports.register = async (req, res) => {
     if (userEmail) {
       return res.status(409).json({
         status: "fail",
-        message_email: "Email already exists.",
+        message: "Email already exists.",
       });
     }
 
     let userExist = await User.findOne({ username });
     if (userExist) {
-      return res.status(422).json({
+      return res.status(409).json({
         status: "fail",
-        message_user: "Username already exists.",
+        message: "Username already exists.",
       });
     }
 
@@ -61,7 +61,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
-
+  console.log(req.body)
   try {
     if (!username || !password) {
       return res.status(400).json({
@@ -96,14 +96,15 @@ exports.login = async (req, res) => {
     const token = jwt.sign(payload, "thisistestforsomething", {
       expiresIn: 86400,
     });
-
+    res.cookie('cokkieName',token, { maxAge: 900000, httpOnly: true })
     res.status(200).json({
       status: "Successfully Login",
       data: { token, user },
     });
+    
 
   } catch (err) {
-    res.status(400).json({
+    res.status(409).json({
       status: "fail",
       message: err.message,
     });
