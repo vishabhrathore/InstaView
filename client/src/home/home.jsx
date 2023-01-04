@@ -5,13 +5,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ShareIcon from '@mui/icons-material/Share';
 import CommentIcon from '@mui/icons-material/Comment';
 import SendIcon from '@mui/icons-material/Send';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Checkbox } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -23,15 +23,23 @@ const Home = () => {
     const [arr, setArr] = useState([])
     useEffect( ()=>{
         const token = window.localStorage.getItem("user:token")
+        
         axios.post("http://localhost:5000/api/feed/post",{
             id:token
         }).then((res)=>{
             console.log("response from home   " + res);
             setArr(res.data.data)
-
+        }).catch((err)=>{
             
+                localStorage.clear()
+                window.location.reload()
+    
         })
     },[])
+    const logout=()=>{
+        localStorage.clear()
+        window.location.reload()
+    }
     
     const navigate = useNavigate()
     return (
@@ -52,6 +60,7 @@ const Home = () => {
                             <li onClick={()=>{navigate('/new_post')}}><AddBoxIcon sx={{fontSize:"27px"}} /></li>
                             <li><FavoriteIcon sx={{fontSize:"27px"}} /></li>
                             <li><img src="https://cdn.dribbble.com/users/1824846/screenshots/5087861/media/0ba89eb57f34dedc63bf46946b531c4c.png" /></li>
+                            <li onClick={logout} style={{color:"red", cursor:"pointer",position:"absolute",right:20,top:20}}><LogoutIcon sx={{fontSize:"27px", color:"red"}}/> Logout</li>
                         </ul>
                     </nav>
                 </header>
@@ -75,7 +84,7 @@ const Home = () => {
                  
                         {
                             arr.map((item,index)=>{
-                                return (<MyPost key={index+1} location={item.location} caption={item.caption} img={item.img}/>)
+                                return (<MyPost key={index+1} location={item.location} caption={item.caption} img={item.img} date={item.date}/>)
                             })
 
                         }

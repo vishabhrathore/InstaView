@@ -8,7 +8,11 @@ const postSchema = new mongoose.Schema({
     },
     img:{
         type: String,
-        require: true, 
+        required: true, 
+    },
+    date:{
+        type: Number,
+        required: true,
     },
     user:{
         type:mongoose.Schema.Types.ObjectId,
@@ -17,4 +21,4 @@ const postSchema = new mongoose.Schema({
     }
 })
 const Post = mongoose.model("POST",postSchema)
-module.exports = Post
+module.exports = Post   

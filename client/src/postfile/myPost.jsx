@@ -15,6 +15,29 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Checkbox } from "@mui/material";
 
 const MyPost =(props)=>{
+
+    function msToTime(s) {
+        s = Date.now() - s
+        var ms = s % 1000;
+        s = (s - ms) / 1000;
+        var secs = s % 60;
+        s = (s - secs) / 60;
+        var mins = s % 60;
+        var hrs = (s - mins) / 60;
+        let day = hrs%24
+        
+        
+        if(day){
+            return `${day} days ago`
+        }else if(hrs){
+            return `${hrs} hrs ago`
+        }else if(mins){
+            return `${mins} mins ago`
+        }else{
+            return `${secs} secs ago`
+        }
+      }
+
     return(
         
         <div className="posts">
@@ -24,7 +47,7 @@ const MyPost =(props)=>{
                     <img width={35} height={35} src="https://cdn.dribbble.com/users/1824846/screenshots/5087861/media/0ba89eb57f34dedc63bf46946b531c4c.png" alt="logo" />
                 </div>
                 <div className="details">
-                    <p className="name">@vishabh</p>
+                    <p className="name">{props.name}</p>
                     <p className="location">{props.location}
                     </p>
                 </div>
@@ -50,7 +73,7 @@ const MyPost =(props)=>{
               <p className="likes">100 likes</p>
               <p className="name">{props.caption}</p>
               <p className="comments">view all 100 comment</p>
-              <p className="posting-time">100 hr ago</p>
+              <p className="posting-time">{msToTime(props.date)}</p>
         </div>
 
         <div className="add-comment">

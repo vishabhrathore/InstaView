@@ -16,7 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Message from '@mui/icons-material/Message';
 import { Navigate } from "react-router-dom";
-
+import { useState } from 'react';
+import { Alert } from '@mui/material';
 
 
 function Copyright(props) {
@@ -36,6 +37,12 @@ const theme = createTheme();
 
 const SignIn =()=> {
   const navigate = useNavigate()
+  const [alert, setAlert] = useState(false)
+  const alertClose = ()=>{
+    setTimeout(() => {
+      setAlert(false)
+    }, 4000);
+  }
    
 
   const handleSubmit = (event) => {
@@ -51,17 +58,21 @@ const SignIn =()=> {
       
       if (res.status === 200) {
         localStorage.setItem("user:token", res.data.data.token)
+        console.log(res.data.data.token)
 
         navigate("/")
         
     } else {
-        prompt("Invalid Email or Password")
+     
         // setData({
         //     username: "",
         //     password: ""
         // })
     }
     }).catch((e)=>{
+      console.log(alert)
+      setAlert(true)
+      alertClose()
       console.log(e.message )
     })
   };
@@ -70,6 +81,9 @@ const SignIn =()=> {
     
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+      {alert&&
+      <Alert severity="error">Invalid UserName or Password</Alert>
+      }
         <CssBaseline />
         <Box
           sx={{

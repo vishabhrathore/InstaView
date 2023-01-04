@@ -94,7 +94,7 @@ exports.login = async (req, res) => {
       },
     };
     const token = jwt.sign(payload, "thisistestforsomething", {
-      expiresIn: 86400,
+      expiresIn: '1m',
     });
     res.cookie('cokkieName',token, { maxAge: 900000, httpOnly: true })
     res.status(200).json({

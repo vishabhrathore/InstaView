@@ -30,6 +30,7 @@ router.post('/newpost', async (req,res)=>{
             caption,
             location,
             img,
+            date:Date.now(),
             user
         })   
 
@@ -51,15 +52,37 @@ router.post("/feed/post" ,async (req,res)=>{
 
         const token = req.body.id
         const decoded = jwt.verify(token,"thisistestforsomething")
-        const data = await Post.find({user:decoded.user.id})
+        console.log(decoded)
+        const data = await Post.find({user:decoded.user.id}).sort({date:-1})
+        console.log(data)
+
         res.status(200).json({
             data
         })
 
     } catch (error) {
-        
+        console.log("error in post fetching -->" + error.message)
     }
+})
 
+
+router.post("/user/id" ,async (req,res)=>{
+     console.log("hello iam here")
+    try {
+
+        const token = req.body.id
+        const decoded = jwt.verify(token,"thisistestforsomething")
+        console.log(decoded.user.id)
+        res.status(200).json({
+            userId:decoded.user.id
+        })
+
+    } catch (error) {
+        console.log("error in post fetching -->" + error.message)
+        res.status(439).json({
+            status:"Token Expired"
+        })
+    }
 })
  
 

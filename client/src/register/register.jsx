@@ -40,12 +40,12 @@ export default function SignUp() {
 
   const [alert, setAlert] = useState({status:false, message:"",class:"error"})
   const alertClose =()=>{
-    setInterval(()=>{
+    setTimeout(()=>{
       setAlert({...alert,status:false})
     },5000)
   }
   const reDirect = ()=>{
-    setInterval(() => {
+    setTimeout(() => {
       navigate("/account/signin")
     }, 4000);
   }
@@ -101,6 +101,10 @@ export default function SignUp() {
       flag = false
     } else if (!regex3.test(value.password)) {
       errors.password = '*Use a mix of alphabetical, numeric characters and special characters'
+      flag = false
+    }
+
+    if(data.password !== data.c_password){
       flag = false
     }
     setFormError(errors)
