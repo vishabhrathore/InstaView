@@ -6,32 +6,29 @@ const jwt = require("jsonwebtoken")
 
 const {register, login} = require("../controllers/login_register")
 
+const authentication = require("../authorization/authorize")
+
 
 router.post("/register",register)
 router.post("/login",login)
 
 
 
-router.post('/newpost', async (req,res)=>{
+router.post('/newpost',authentication, async (req,res)=>{
     try {
-        const {caption ,location, img, user} = req.body
-        console.log(req.body) 
-        if(!caption || !location || !img || !user){
+        const {caption ,location, img} = req.body
+
+        if(!caption || !location || !img){
            return res.status(420).send("please fill all fields")
         }
-        // const createPost = new Post({
-        //     caption, 
-        //     descripition:desc,
-        //     image:url,
-        //     user:userId
-        // })   
+    
        
         const createPost = new Post({
             caption,
             location,
             img,
             date:Date.now(),
-            user
+            user:req.user._id
         })   
 
         await createPost.save()
@@ -53,8 +50,7 @@ router.post("/feed/post" ,async (req,res)=>{
         const token = req.body.id
         const decoded = jwt.verify(token,"thisistestforsomething")
         console.log(decoded)
-        const data = await Post.find({user:decoded.user.id}).sort({date:-1})
-        console.log(data)
+        const data = await Post.find({user:decoded.user.id}).sort({date:-1})  
 
         res.status(200).json({
             data
@@ -64,28 +60,6 @@ router.post("/feed/post" ,async (req,res)=>{
         console.log("error in post fetching -->" + error.message)
     }
 })
-
-
-router.post("/user/id" ,async (req,res)=>{
-     console.log("hello iam here")
-    try {
-
-        const token = req.body.id
-        const decoded = jwt.verify(token,"thisistestforsomething")
-        console.log(decoded.user.id)
-        res.status(200).json({
-            userId:decoded.user.id
-        })
-
-    } catch (error) {
-        console.log("error in post fetching -->" + error.message)
-        res.status(439).json({
-            status:"Token Expired"
-        })
-    }
-})
- 
-
 
 
 module.exports = router

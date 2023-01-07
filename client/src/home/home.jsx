@@ -59,7 +59,7 @@ const Home = () => {
                             <li><MessageIcon sx={{fontSize:"27px"}} /></li>
                             <li onClick={()=>{navigate('/new_post')}}><AddBoxIcon sx={{fontSize:"27px"}} /></li>
                             <li><FavoriteIcon sx={{fontSize:"27px"}} /></li>
-                            <li><img src="https://cdn.dribbble.com/users/1824846/screenshots/5087861/media/0ba89eb57f34dedc63bf46946b531c4c.png" /></li>
+                            <li onClick={()=>{navigate('/user/profile')}}><img src="https://cdn.dribbble.com/users/1824846/screenshots/5087861/media/0ba89eb57f34dedc63bf46946b531c4c.png" /></li>
                             <li onClick={logout} style={{color:"red", cursor:"pointer",position:"absolute",right:20,top:20}}><LogoutIcon sx={{fontSize:"27px", color:"red"}}/> Logout</li>
                         </ul>
                     </nav>
@@ -84,7 +84,7 @@ const Home = () => {
                  
                         {
                             arr.map((item,index)=>{
-                                return (<MyPost key={index+1} location={item.location} caption={item.caption} img={item.img} date={item.date}/>)
+                                return (<MyPost key={index+1} location={item.location} caption={item.caption} img={item.img} date={item.date} id={item._id}/>)
                             })
 
                         }

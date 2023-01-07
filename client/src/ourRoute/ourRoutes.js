@@ -5,7 +5,7 @@ import Home from "../home/home";
 import { Navigate } from "react-router-dom";
 import SignUp from "../register/register";
 import CreatePost from "../post/createPost";
-
+import Profile from "../profile/profile";
 
 const OurRoute =()=>{
     const routes =[
@@ -32,6 +32,12 @@ const OurRoute =()=>{
         mark:"post",
         path:"/new_post",
         component:<CreatePost/>
+    },
+     {
+        id:5,
+        mark:"profile",
+        path:"/user/profile",
+        component:<Profile/>
     },
  ] 
     const PrivateRoute = ({children})=>{

@@ -13,8 +13,12 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Checkbox } from "@mui/material";
+import { useState } from 'react';
 
 const MyPost =(props)=>{
+
+    const [favourite,setFavourite] = useState(false)
+    console.log(favourite + "  " + props.id)
 
     function msToTime(s) {
         s = Date.now() - s
@@ -24,12 +28,9 @@ const MyPost =(props)=>{
         s = (s - secs) / 60;
         var mins = s % 60;
         var hrs = (s - mins) / 60;
-        let day = hrs%24
         
         
-        if(day){
-            return `${day} days ago`
-        }else if(hrs){
+       if(hrs){
             return `${hrs} hrs ago`
         }else if(mins){
             return `${mins} mins ago`
@@ -47,7 +48,7 @@ const MyPost =(props)=>{
                     <img width={35} height={35} src="https://cdn.dribbble.com/users/1824846/screenshots/5087861/media/0ba89eb57f34dedc63bf46946b531c4c.png" alt="logo" />
                 </div>
                 <div className="details">
-                    <p className="name">{props.name}</p>
+                    <p className="name">{props.id}</p>
                     <p className="location">{props.location}
                     </p>
                 </div>
@@ -60,7 +61,12 @@ const MyPost =(props)=>{
         </div>
         <div className="post-footer">
              <div className="lks">
-                <Checkbox icon={<FavoriteBorderIcon/>} checkedIcon={<FavoriteIcon/>}/>
+                <Checkbox onClick={()=>{setFavourite(!favourite)}} sx={{
+          color: "red",
+          '&.Mui-checked': {
+            color: "red",
+          },
+        }}icon={<FavoriteBorderIcon />} checkedIcon={<FavoriteIcon/>} />
                 <SendIcon sx={{mt:"10px"}}/>
                 <CommentIcon sx={{mt:"10px"}}/>
             <div className="save">

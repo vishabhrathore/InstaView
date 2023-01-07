@@ -12,6 +12,9 @@ import { useEffect } from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Alert } from '@mui/material';
 
 import "../post/postStyle.css"
 
@@ -31,7 +34,8 @@ const CreatePost = () => {
     const [file, setFile] = useState({state:false,url:""});
     const navigate = useNavigate()
     const cloudName = 'dpdkzg4ld'
-    const [idas, setidas] = useState("")
+    const [open , setOpen] = useState(false)
+    const [alert , setAlert] = useState(false)
     const [data, setData] = useState({
         location: "",
         caption: "",
@@ -39,25 +43,9 @@ const CreatePost = () => {
     })
     const [url, SetUrl] = useState('')
 
-    useEffect(() => {
-        
-        const token = window.localStorage.getItem("user:token")
-
-        axios.post("http://localhost:5000/api/user/id", {
-            id: token
-        }).then((res) => {
-            setidas(res.data.userId)
-        }).catch((err) => {
-            console.log(err)
-            if(err.response.status === 439){
-                localStorage.clear()
-                window.location.reload()
-            }
-        })
-
-    
-    }, [])
     const uploadImage = async () => {
+        const cloudName = 'dpdkzg4ld'
+        setOpen(true)
         const formData = new FormData();
         formData.append('file', data.img);
         formData.append('upload_preset', "instaview");
@@ -68,15 +56,15 @@ const CreatePost = () => {
             body: formData
         })
        
-
         if (res.status === 200) {
+            setOpen(false)
             return await res.json()
-
         } else {
+            setOpen(false)
+            alert("Error in Uploding Photo")
             return "Error"
+
         }
-
-
 
     }
     const handleSubmit = async (e) => {
@@ -85,7 +73,7 @@ const CreatePost = () => {
         SetUrl(secure_url)
         console.log(secure_url, url)
         console.log(data)
-        console.log(idas)
+
 
 
         const datasss =
@@ -93,17 +81,27 @@ const CreatePost = () => {
             caption: data.caption,
             location: data.location,
             img: secure_url,
-            user: idas
         }
-
-         
-        axios.post("http://localhost:5000/api/newpost", datasss).then((res) => {
+        const token = window.localStorage.getItem("user:token")
+        let config = {
+            headers: {
+              Authenticate: token,
+            }
+        }
+    
+        axios.post("http://localhost:5000/api/newpost", datasss , config).then((res) => {
             console.log(res)
             if (res.status === 200) {
-                navigate("/")
+                setAlert(true)
+                setInterval(() => {
+                    navigate("/")
+                }, 2000);
             }
         }).catch((err) => {
-            console.log("ERRoRR --> " + err.message)
+          if(err.response.status === 401){
+                localStorage.clear()
+                window.location.reload()
+            }
         })
 
 
@@ -112,8 +110,18 @@ const CreatePost = () => {
 
     return (
         <>
+        <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+         >
+        <CircularProgress color="inherit" />
+        </Backdrop>
+
         <Container maxWidth={"md"}>
             <CssBaseline/>
+            {alert&&
+                <Alert severity="success">Post Created SuccessFully</Alert>
+            }
             <Box component="form" onSubmit={handleSubmit}  sx={{
                 mt:8,
                 border:1,
@@ -194,9 +202,6 @@ const CreatePost = () => {
                         Create Post
                     </Button>
                     </Box>
-                    
-                    
-                    
                     </Grid>
 
                 </Grid>

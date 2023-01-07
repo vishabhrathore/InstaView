@@ -174,9 +174,7 @@ export default function SignUp() {
     }
   };
 
-  const handleClose = ()=>{
 
-  }
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../models/User")
-
+   
 
 exports.register = async (req, res) => {
   const { name, username, email, password } = req.body;
@@ -83,27 +83,27 @@ exports.login = async (req, res) => {
       return res.status(401).json({
         status: "fail",
         message: "Invalid Credentials",
-      });
+      }); 
     }
 
     const payload = {
       user: {
         id: user._id,
-        name: user.name,
+        name: user.name,  
         username: user.username
       },
     };
     const token = jwt.sign(payload, "thisistestforsomething", {
-      expiresIn: '1m',
+      expiresIn: '100m',
     });
-    res.cookie('cokkieName',token, { maxAge: 900000, httpOnly: true })
+
     res.status(200).json({
       status: "Successfully Login",
       data: { token, user },
     });
     
 
-  } catch (err) {
+  } catch (err) {    
     res.status(409).json({
       status: "fail",
       message: err.message,
