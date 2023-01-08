@@ -12,14 +12,112 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
 import { Checkbox } from "@mui/material";
 import { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 const MyPost =(props)=>{
-
+    const array = props.likes
     const [favourite,setFavourite] = useState(false)
-    console.log(favourite + "  " + props.id)
+    const [comment,setComment] = useState("")
+    useEffect(()=>{
+       for(let i=0; i<array.length; i++){
+        if(array[i] === props.user._id){
+            setFavourite(true)
+            break
+        }
+       }
+  
+    },[])
 
+    const findComment =()=>{
+        const token = window.localStorage.getItem("user:token")
+        let config = {
+            headers: {
+              Authenticate: token,
+            }
+        }
+    
+        axios.post("/api/find/comment", {
+            postId:props.id,
+        } , config).then((res) => {
+            console.log(res)
+        }).catch((err) => {
+          if(err.response.status === 401){
+                localStorage.clear()
+                window.location.reload()
+            }
+        })
+    }
+
+    const handleComment =()=>{
+        console.log("comment")
+        const token = window.localStorage.getItem("user:token")
+        let config = {
+            headers: {
+              Authenticate: token,
+            }
+        }
+    
+        axios.post("/api/user/comment", {
+            message:comment,
+            postId:props.id,
+            userTO:props.user._id
+
+
+        } , config).then((res) => {
+            console.log(res)
+            props.findComment(res.data.data)
+        }).catch((err) => {
+          if(err.response.status === 401){
+                localStorage.clear()
+                window.location.reload()
+            }
+        })
+    }
+
+
+    const handleLike = ()=>{
+        setFavourite(!favourite)
+
+        const token = window.localStorage.getItem("user:token")
+        let config = {
+            headers: {
+              authenticate: token,
+            }
+        }
+
+        if(favourite){
+            axios.put("/api/post/unlike", {
+                postId : props.id
+            } , config).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+              if(err.response.status === 401){
+                  console.log(err.message)
+                }
+            })
+
+        }else{
+            axios.put("/api/post/like", {
+                postId : props.id
+            } , config).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+              if(err.response.status === 401){
+                    localStorage.clear()
+                    window.location.reload()
+                }
+            })
+        }
+    
+       
+    }
+
+   
     function msToTime(s) {
         s = Date.now() - s
         var ms = s % 1000;
@@ -45,10 +143,10 @@ const MyPost =(props)=>{
         <div className="post-title">
             <div className="post-left">
                 <div className="image">
-                    <img width={35} height={35} src="https://cdn.dribbble.com/users/1824846/screenshots/5087861/media/0ba89eb57f34dedc63bf46946b531c4c.png" alt="logo" />
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                 </div>
                 <div className="details">
-                    <p className="name">{props.id}</p>
+                    <p className="name">{props.user._id}</p>
                     <p className="location">{props.location}
                     </p>
                 </div>
@@ -57,16 +155,11 @@ const MyPost =(props)=>{
             </div>
         </div>
         <div className="post-content">
-            <img height={500} width={500} src={props.img} alt="logo" />
+            <img src={props.img} alt="logo" />
         </div>
         <div className="post-footer">
              <div className="lks">
-                <Checkbox onClick={()=>{setFavourite(!favourite)}} sx={{
-          color: "red",
-          '&.Mui-checked': {
-            color: "red",
-          },
-        }}icon={<FavoriteBorderIcon />} checkedIcon={<FavoriteIcon/>} />
+                {favourite?<FavoriteIcon onClick={handleLike}  sx={{mt:"10px"}} />:<FavoriteBorderIcon  sx={{mt:"10px"}} onClick={handleLike}/>}
                 <SendIcon sx={{mt:"10px"}}/>
                 <CommentIcon sx={{mt:"10px"}}/>
             <div className="save">
@@ -76,19 +169,19 @@ const MyPost =(props)=>{
         </div>
 
         <div className="post-footer-content">
-              <p className="likes">100 likes</p>
+              <p className="likes">{array.length}</p>
               <p className="name">{props.caption}</p>
-              <p className="comments">view all 100 comment</p>
+              <p onClick={findComment} className="comments">View Comment</p>
               <p className="posting-time">{msToTime(props.date)}</p>
         </div>
 
         <div className="add-comment">
             <div className="side-left">
                  <InsertEmoticonIcon/>
-                 <input type="text" placeholder="Add a comment" />
+                 <input type="text" placeholder="Add a comment" onChange={(e)=>{setComment(e.target.value)}}/>
             </div>
             <div className="side-right">
-               <p>Post</p> 
+               <SendIcon onClick={handleComment}/>
             </div>
         </div>
 

@@ -11,26 +11,45 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Button from '@mui/material/Button';
 import {IconButton } from "@mui/material";
 import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 
 
 
-const Profile = ()=>{
-    const [file, setFile] = useState("https://img.etimg.com/thumb/width-1200,height-900,imgsize-613563,resizemode-1,msid-74702802/news/politics-and-nation/pm-modi-to-address-nation-today-next-15-days-crucial-to-indias-battle-against-covid-19.jpg");
+const Profile = (props)=>{
+
+    console.log('re render')
+    const [userDetails, setUserdetails] = useState({img:""})
+    const [file, setFile] = useState("");
     const [open, setOpen] = useState(false);
-    const [img, setImg] = useState('');
+    const [img, setImg] = useState("");
+   
 
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
+    const token = window.localStorage.getItem("user:token")
+    
+    useEffect(()=>{
+        axios.post("/api/user/details", {
+            id:token
+         }).then((res) => {
+     
+             if (res.status === 200) {
+                setUserdetails(res.data.data)
+                // setFile(userDetails.img)
+                 
+             }
+         }).catch((err) => {
+           if(err.response.status === 401){
+                console.log(err.message)
+             }
+         })
+    },[token])
 
-         
-      console.log(file)
-      setOpen(false);
-    };
+
+
 
     const uploadImage = async () => {
+      
         const cloudName = 'dpdkzg4ld'
         setOpen(true)
         const formData = new FormData();
@@ -49,12 +68,47 @@ const Profile = ()=>{
         } else {
             setOpen(false)
             alert("Error in Uploding Photo")
-            return "Error"
+            return false
 
         }
     }
+   
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = async () => {
+        const { secure_url } = await uploadImage()
+        
+        setFile(secure_url)
+
+        console.log(secure_url, file)
+
+
+        const token = window.localStorage.getItem("user:token")
+        axios.put("/api/user/details", {
+           id:token,
+           imgFile:secure_url
+           
+        }).then((res) => {
     
-    
+            if (res.status === 200) {
+                setUserdetails(res.data.data)
+            }
+        }).catch((err) => {
+          if(err.response.status === 401){
+               console.log(err.message)
+            }
+        })
+      setFile(secure_url)
+      setOpen(false);
+    };
+
+     
+    const refresh = ()=>{
+
+    }
+  
+
     const BootstrapDialog = styled(Dialog)(({ theme }) => ({
         '& .MuiDialogContent-root': {
           padding: theme.spacing(2),
@@ -91,7 +145,7 @@ const Profile = ()=>{
                 <label className="addIcon" htmlFor="icon-button-file">
                     <IconButton className="addIcon" color="primary" aria-label="upload picture"
                         component="span">
-                        <Avatar alt="Remy Sharp" src={file} sx={{ width:75, height: 75 }}></Avatar>
+                        <Avatar alt="Remy Sharp" src={userDetails.img || file} sx={{ width:75, height: 75 }}></Avatar>
                     </IconButton>
                 </label>
             </div>
@@ -99,7 +153,7 @@ const Profile = ()=>{
 
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button onClick={handleClose}>
             Save changes
           </Button>
         </DialogActions>
@@ -111,7 +165,7 @@ const Profile = ()=>{
                 border:1
             }}>
                 <Grid container>
-                    <Grid item sm={12} xs={12}>
+                    <Grid item sm={5} xs={5}>
                         <Box sx={{
                             display:"flex",
                             justifyContent:"center",
@@ -119,26 +173,33 @@ const Profile = ()=>{
                             p:4,
                             pb:1
                         }}>
-                        <Avatar alt="Remy Sharp" src="https://img.etimg.com/thumb/width-1200,height-900,imgsize-613563,resizemode-1,msid-74702802/news/politics-and-nation/pm-modi-to-address-nation-today-next-15-days-crucial-to-indias-battle-against-covid-19.jpg" sx={{ width:75, height: 75 }}></Avatar>
+                        <Avatar onClick={refresh} alt="Remy Sharp" src={userDetails} sx={{ width:100, height: 100 }}></Avatar>
                         </Box>
                     </Grid>
-                    <Grid item sm={12} xs={12} sx={{
+                    <Grid item sm={7} xs={7} sx={{
+                        display:"flex",
+                        pt:9
+                       
+                    }}>
+                       {userDetails.name}
+                    </Grid>
+                    <Grid item sm={5} xs={5} sx={{
                         display:"flex",
                         justifyContent:"center",
                         alignContent:"center",
                     }}><Button onClick={handleClickOpen} variant="contained">Edit Profile</Button></Grid>
-                    <Grid item sm={12} xs={12} sx={{
+                    <Grid item sm={7} xs={7} sx={{
                         display:"flex",
-                        justifyContent:"center",
-                        alignContent:"center",
-                        p:3
-                    }}>PM Modi</Grid>
+                    }}>{userDetails.username}</Grid>
+                   
                     <Grid item sm={4} xs={4} sx={
                         {
                             display:"flex",
                             alignContent:"center",
                             justifyContent:"center",
-                            fontWeight:'bold'
+                            fontWeight:'bold',
+                            mt:3
+
                         }
                     }>110</Grid>
                     <Grid item sm={4} xs={4} sx={
@@ -146,7 +207,8 @@ const Profile = ()=>{
                             display:"flex",
                             alignContent:"center",
                             justifyContent:"center",
-                            fontWeight:'bold'
+                            fontWeight:'bold',
+                            mt:3
                         }
                     }>500</Grid>
                     <Grid item sm={4} xs={4} sx={
@@ -154,7 +216,8 @@ const Profile = ()=>{
                             display:"flex",
                             alignContent:"center",
                             justifyContent:"center",
-                            fontWeight:'bold'
+                            fontWeight:'bold',
+                            mt:3
                         }
                     }>1000</Grid>
                     <Grid item sm={4} xs={4} sx={

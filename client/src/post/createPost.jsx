@@ -15,8 +15,10 @@ import Paper from '@mui/material/Paper';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Alert } from '@mui/material';
+import { useContext } from "react";
 
 import "../post/postStyle.css"
+import Global from "../Globalvalues/GlobalData";
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -89,7 +91,7 @@ const CreatePost = () => {
             }
         }
     
-        axios.post("http://localhost:5000/api/newpost", datasss , config).then((res) => {
+        axios.post("/api/newpost", datasss , config).then((res) => {
             console.log(res)
             if (res.status === 200) {
                 setAlert(true)
