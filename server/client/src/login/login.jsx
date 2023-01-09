@@ -53,7 +53,7 @@ const SignIn =()=> {
       password: data.get('password'),
     };
 
-    axios.post("http://localhost:5000/api/login",datas).then((res)=>{
+    axios.post("/api/login",datas).then((res)=>{
       console.log(res)
       
       if (res.status === 200) {

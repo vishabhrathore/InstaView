@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import SignIn from "../login/login";
 import Home from "../home/home";
@@ -6,8 +6,11 @@ import { Navigate } from "react-router-dom";
 import SignUp from "../register/register";
 import CreatePost from "../post/createPost";
 import Profile from "../profile/profile";
+import axios from "axios";
+
 
 const OurRoute =()=>{
+  
     const routes =[
      {
         id:1,
@@ -40,6 +43,7 @@ const OurRoute =()=>{
         component:<Profile/>
     },
  ] 
+
     const PrivateRoute = ({children})=>{
       const isUserLoggedIn = window.localStorage.getItem('user:token') || false
       const isFormPages = window.location.pathname.includes("account")
@@ -55,6 +59,7 @@ const OurRoute =()=>{
     }
      return(
          <>
+         
          <Routes>
             {
              routes.map(({id,mark,path,component})=>{
@@ -62,6 +67,8 @@ const OurRoute =()=>{
              })
             }
          </Routes>
+       
+         
          </>
      )
  }

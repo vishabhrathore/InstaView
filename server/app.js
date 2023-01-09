@@ -13,17 +13,25 @@ dotenv.config({path:'./config.env'})
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
-app.use('/api', authorization);
 
 
-app
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 5000
 
 require("./database/conn")
 
 app.get("/",(req,res)=>{
     res.send("WELCOME")  
 })
+
+app.use('/api', authorization);
+
+if(process.env.NODE_ENV == "production"){
+    app.use(express.static("client/build"));
+    const path = require("path");
+    app.get("*", (req,res)=>{
+        res.sendFile(path.resolve(__dirname,'client','build','index.html'));
+    })
+}
 
 app.listen(PORT,()=>{
     console.log(`server is runnning at ${PORT}`)

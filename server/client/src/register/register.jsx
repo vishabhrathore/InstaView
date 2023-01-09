@@ -151,7 +151,7 @@ export default function SignUp() {
 
 
       console.log(datas)
-      axios.post('http://localhost:5000/api/register', datas).then((res) => {
+      axios.post('/api/register', datas).then((res) => {
       console.log(res)
         
     

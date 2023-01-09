@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../models/User")
-   
+      
 
 exports.register = async (req, res) => {
   const { name, username, email, password } = req.body;
@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
     if (!email || !password || !name || !username) {
       return res.status(422).json({
         status: "fail",
-        message: "Please provide all fields",
+        message: "Please provide all fields",   
       });
     }
 
@@ -37,15 +37,16 @@ exports.register = async (req, res) => {
         message: "Username already exists.",
       });
     }
-
-    const user = new User({
+              
+    const user = new User({   
       name,
       username,
       email,
-      password
+      password,
+      img:"Remy Sharp"
     })
 
-    await user.save()
+    await user.save()  
 
     return res.status(201).json({
       message: "User Created Successfully"
